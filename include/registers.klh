@@ -1,0 +1,33 @@
+%ifndef registers_h
+%define registers_h
+
+--getters
+-- typ: 'F', 'DI', 'DO', 'AI', 'AO', 'UI', 'UO'
+--      'R', 'PR'
+ROUTINE GET_CMT(typ : STRING; id : INTEGER) : STRING FROM registers
+ROUTINE GET_IO(typ : STRING; port_no : INTEGER) : INTEGER FROM registers
+ROUTINE GET_INT_REG(reg_no : INTEGER) : INTEGER FROM registers
+ROUTINE GET_REAL_REG(reg_no : INTEGER) : REAL   FROM registers
+-- get tpe arguments
+ROUTINE GET_INT_AR(reg_no : INTEGER) : INTEGER FROM registers
+ROUTINE GET_REAL_AR(reg_no : INTEGER) : REAL FROM registers
+ROUTINE GET_STR_AR(reg_no : INTEGER) : STRING FROM registers
+-- returns if the register contains a real value = TRUE,
+-- or integer = FALSE
+ROUTINE GET_NUM_REG(reg_no : INTEGER; int_val : INTEGER; real_val : REAL) : BOOLEAN FROM registers
+ROUTINE GET_SR(reg_no : INTEGER) : STRING FROM registers
+--setters
+ROUTINE PUT_SR(reg_no : INTEGER; str_val : STRING) FROM registers
+-- typ: 'F', 'DI', 'DO', 'AI', 'AO', 'UI', 'UO'
+--      'R', 'PR'
+ROUTINE PUT_CMT(typ : STRING; id : INTEGER; cmt : STRING) FROM registers
+-- TO ADD : ROUTINE PUT_IO(typ : STRING; port_no, value : INTEGER) : INTEGER FROM registers
+ROUTINE PUT_INT_REG(reg_no : INTEGER; int_val : INTEGER) FROM registers
+ROUTINE PUT_REAL_REG(reg_no : INTEGER; real_val : REAL) FROM registers
+--type check
+ROUTINE IS_REG_REAL(reg_no : INTEGER) : BOOLEAN FROM registers
+ROUTINE IS_REG_INT(reg_no : INTEGER) : BOOLEAN FROM registers
+--conversions
+
+
+%endif --registers_h

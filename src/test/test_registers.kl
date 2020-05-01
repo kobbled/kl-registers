@@ -1,0 +1,181 @@
+PROGRAM test_regist
+%NOLOCKGROUP
+
+VAR
+  entry : INTEGER
+  status : INTEGER
+
+%INCLUDE kliotyps.kl
+
+%INCLUDE registers.klh
+%INCLUDE kunit.klh
+
+ROUTINE t_set_cmt : BOOLEAN
+  VAR
+    reg_no : INTEGER
+    s : ARRAY[4] OF STRING[16]
+    b : ARRAY[4] OF BOOLEAN
+  BEGIN
+    reg_no = 10 -- TP_Prgm_Num
+    s[1] = 'TP_Prgm_Num'
+    PUT_CMT('R', reg_no, s[1])
+    GET_VAR(entry, 'registers', 'ok', b[1], status)
+
+    reg_no = 16 -- Temp_UFrame
+    s[2] = 'Temp_UFrame'
+    PUT_CMT('PR', reg_no, s[2])
+    GET_VAR(entry, 'registers', 'ok', b[2], status)
+
+    reg_no = 1 -- Red LT
+    s[3] = 'Red LT'
+    PUT_CMT('DO', reg_no, s[3])
+    GET_VAR(entry, 'registers', 'ok', b[3], status)
+
+    reg_no = 8 -- Enable
+    s[4] = 'Enable'
+    PUT_CMT('UI', reg_no, s[4])
+    GET_VAR(entry, 'registers', 'ok', b[4], status)
+    
+
+    RETURN(b[1] AND b[2] AND
+      b[3] AND b[4])
+  END t_set_cmt
+
+ROUTINE t_get_cmt : BOOLEAN
+  VAR
+    reg_no : INTEGER
+    s : ARRAY[4] OF STRING[16]
+  BEGIN
+    reg_no = 10 -- TP_Prgm_Num
+    s[1] = GET_CMT('R', reg_no)
+    reg_no = 16 -- Temp_UFrame
+    s[2] = GET_CMT('PR', reg_no)
+    reg_no = 1 -- Red LT
+    s[3] = GET_CMT('DO', reg_no)
+    reg_no = 8 -- Enable
+    s[4] = GET_CMT('UI', reg_no)
+    
+
+    RETURN(kunit_eq_str('TP_Prgm_Num',s[1]) AND
+      kunit_eq_str('Temp_UFrame',s[2]) AND
+      kunit_eq_str('Red LT',s[3]) AND
+      kunit_eq_str('Enable',s[4]))
+  END t_get_cmt
+
+ROUTINE t_setintreg : BOOLEAN
+  VAR
+    reg_no : INTEGER
+    i : INTEGER
+    STATUS : INTEGER
+    b : BOOLEAN
+  BEGIN
+    reg_no = 10 -- TP_Prgm_Num
+    i = 2224
+    PUT_INT_REG(reg_no, i)
+    GET_VAR(entry, 'registers', 'ok', b, status)
+    
+    RETURN(b)
+  END t_setintreg
+
+ROUTINE t_getintreg : BOOLEAN
+  VAR
+    reg_no : INTEGER
+    o : INTEGER
+  BEGIN
+    reg_no = 10 -- TP_Prgm_Num
+    RETURN(kunit_eq_int(2224, GET_INT_REG(reg_no)))
+  END t_getintreg
+
+  ROUTINE t_setrealreg : BOOLEAN
+  VAR
+    reg_no : INTEGER
+    r : REAL
+    STATUS : INTEGER
+    b : BOOLEAN
+  BEGIN
+    reg_no = 133 -- diameter
+    r = 3.56
+    PUT_REAL_REG(reg_no, r)
+    GET_VAR(entry, 'registers', 'ok', b, status)
+    
+    RETURN(b)
+  END t_setrealreg
+
+  ROUTINE t_getrealreg : BOOLEAN
+  VAR
+    reg_no : INTEGER
+    o : REAL
+  BEGIN
+    reg_no = 133 -- diameter
+    RETURN(kunit_eq_r(3.56, GET_REAL_REG(reg_no)))
+  END t_getrealreg
+
+  ROUTINE t_notareal : BOOLEAN
+  VAR
+    reg_no : INTEGER
+  BEGIN
+    reg_no = 10 -- TP_Prgm_Num
+    RETURN(kunit_assert(NOT IS_REG_REAL(reg_no)))
+  END t_notareal
+
+  ROUTINE t_isareal : BOOLEAN
+  VAR
+    reg_no : INTEGER
+  BEGIN
+    reg_no = 133 -- diameter
+    RETURN(kunit_assert(IS_REG_REAL(reg_no)))
+  END t_isareal
+
+  ROUTINE t_isaint : BOOLEAN
+  VAR
+    reg_no : INTEGER
+  BEGIN
+    reg_no = 10 -- TP_Prgm_Num
+    RETURN(kunit_assert(IS_REG_INT(reg_no)))
+  END t_isaint
+
+  ROUTINE t_getio : BOOLEAN
+  VAR
+    port_no : INTEGER
+  BEGIN
+    --test flags
+    SET_PORT_VAL(io_flag, 27, 1, status)
+    IF status <> 0 THEN
+      WRITE TPDISPLAY('setting flag failed in t_getio')
+      RETURN(FALSE)
+    ENDIF
+
+    --test DI
+    SET_PORT_SIM(io_din, 14, 1, status)
+    IF status <> 0 THEN
+      WRITE TPDISPLAY('setting DI failed in t_getio')
+      RETURN(FALSE)
+    ENDIF
+
+    RETURN(kunit_eq_int(1, GET_IO('F', 27)) AND kunit_eq_int(1, GET_IO('DI', 14)))
+  END t_getio
+
+ROUTINE revert_reg
+  BEGIN
+    CLR_PORT_SIM(io_din, 14, status)
+    IF status <> 0 THEN
+      WRITE TPERROR('cannot unsimulate DI[14]')
+    ENDIF
+  END revert_reg
+
+BEGIN
+  kunit_test('set_comment()', t_set_cmt)
+  kunit_test('get_comment()', t_get_cmt)
+  kunit_test('set_intreg()', t_setintreg)
+  kunit_test('get_intreg()', t_getintreg)
+  kunit_test('set_realreg()', t_setrealreg)
+  kunit_test('get_realreg()', t_getrealreg)
+  kunit_test('isnotreal()', t_notareal)
+  kunit_test('isreal()', t_isareal)
+  kunit_test('isint()', t_isaint)
+  kunit_test('get_io()', t_getio)
+  -- return simulated ports
+  revert_reg
+
+  kunit_done
+END test_regist

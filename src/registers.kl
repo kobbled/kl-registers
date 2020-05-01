@@ -1,0 +1,405 @@
+PROGRAM registers
+%NOLOCKGROUP
+
+%INCLUDE registers.klt
+%INCLUDE registers.klh
+%INCLUDE errors.klh
+
+BEGIN
+END registers
+
+-- #########
+-- Getters
+-- #########
+
+-- return comments from registers and IO's 
+-- specifying the register type and its number
+ROUTINE GET_CMT
+  ------------------------------------
+  VAR
+    cmt : STRING[30]
+    STATUS : INTEGER
+  BEGIN
+      IF (typ='F') THEN
+        GET_PORT_CMT(io_flag,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+      ELSE
+      IF (typ='DI') THEN
+        GET_PORT_CMT(io_din,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+      ELSE
+      IF (typ='DO') THEN
+        GET_PORT_CMT(io_dout,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+      ELSE
+      IF (typ='AI') THEN
+        GET_PORT_CMT(io_anin,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+      ELSE
+      IF (typ='AO') THEN
+        GET_PORT_CMT(io_anout,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+      ELSE
+      IF (typ='UI') THEN
+        GET_PORT_CMT(io_uopin,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+      ELSE
+      IF (typ='UO') THEN
+        GET_PORT_CMT(io_uopout,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+      ELSE
+      IF (typ='R') THEN
+        GET_REG_CMT(id, cmt, STATUS)
+          CHK_STAT(STATUS)
+      ELSE
+      IF (typ='PR') THEN
+        GET_PREG_CMT(id, cmt, STATUS)
+          CHK_STAT(STATUS)
+      ELSE
+        karelError('GET_CMT-wrong type', 2)
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+
+    RETURN(cmt)
+  END GET_CMT
+
+ROUTINE GET_IO
+  VAR
+    port_type : INTEGER
+    STATUS : INTEGER
+    val : INTEGER
+  BEGIN
+    port_type = 0
+    IF (typ='F') THEN
+      port_type = io_flag
+    ENDIF
+    IF (typ='DI') THEN
+      port_type = io_din
+    ENDIF
+    IF (typ='DO') THEN
+      port_type = io_dout
+    ENDIF
+    IF (typ='AI') THEN
+      port_type = io_anin
+    ENDIF
+    IF (typ='AO') THEN
+      port_type = io_anout
+    ENDIF
+    IF (typ='UI') THEN
+      port_type = io_uopin
+    ENDIF
+    IF (typ='UO') THEN
+      port_type = io_uopout
+    ENDIF
+
+    IF (port_type <> 0) THEN
+      GET_PORT_VAL(port_type, port_no, val, STATUS)
+      CHK_STAT(STATUS)
+    ELSE
+      karelError('GET_PORT_VAL wrong type', 2)
+    ENDIF
+
+    RETURN(val)
+  END GET_IO
+
+-- Public: get integer value for specified register
+-- wrapper for GET_REG
+-- returns the integer value of the register
+ROUTINE GET_INT_REG
+  VAR
+    real_flg     :  BOOLEAN
+    real_val    :  REAL
+    int_val      : INTEGER
+    STATUS   : INTEGER
+  BEGIN
+    GET_REG(reg_no, real_flg, int_val, real_val, STATUS)
+    CHK_STAT(STATUS)
+    IF real_flg = TRUE THEN
+      int_val = TRUNC(real_val)
+    ENDIF
+      
+    RETURN(int_val)
+  END GET_INT_REG
+
+-- Get real register value
+-- Arg: real register number
+ROUTINE GET_REAL_REG
+  VAR
+    real_flg    :  BOOLEAN
+    real_val   :  REAL
+    int_val     : INTEGER
+    STATUS : INTEGER
+  BEGIN
+    GET_REG(reg_no, real_flg, int_val, real_val, STATUS)
+    CHK_STAT(STATUS)
+    IF real_flg = FALSE THEN
+      real_val = int_val
+    ENDIF
+      
+    RETURN(real_val)
+  END GET_REAL_REG
+
+
+-- Used for retrieving any number register if unsure of type
+-- return a boolean if number is a real number, returns false
+-- if number is an integer
+ROUTINE GET_NUM_REG
+  VAR
+    real_flg : BOOLEAN
+    STATUS : INTEGER
+  BEGIN
+    real_val = 0.0
+    int_val = 0
+    GET_REG(reg_no, real_flg, int_val, real_val, STATUS)
+    CHK_STAT(STATUS)
+    RETURN(real_flg)
+  END GET_NUM_REG
+
+-- Get string register value
+ROUTINE GET_SR
+  VAR
+    str_val	: STRING[100]
+    STATUS : INTEGER
+  BEGIN
+    GET_STR_REG(reg_no, str_val, STATUS)
+    CHK_STAT(STATUS)
+    
+    RETURN(str_val)
+  END GET_SR
+
+-- Get TPE arguments
+-- ***********
+
+-- Return int LS argument value
+ROUTINE GET_INT_AR
+VAR
+  data_type  : INTEGER
+  int_value  : INTEGER
+  real_value : REAL
+  string_value : STRING[30]
+  STATUS     : INTEGER
+  
+BEGIN
+  data_type = Type_INTEGER
+  
+  GET_TPE_PRM(reg_no, data_type, int_value, real_value, string_value, STATUS)
+  IF STATUS = NOPARAM THEN
+      WRITE('Parameter AR[', reg_no ,'] does not exist.')
+  ENDIF
+  CHK_STAT(STATUS)
+  
+  RETURN(int_value)
+  
+END GET_INT_AR
+
+-- Return real LS argument value
+ROUTINE GET_REAL_AR
+VAR
+  data_type  : INTEGER
+  int_value  : INTEGER
+  real_value : REAL
+  string_value : STRING[30]
+  STATUS     : INTEGER
+  
+BEGIN
+  data_type = Type_REAL
+  
+  GET_TPE_PRM(reg_no, data_type, int_value, real_value, string_value, STATUS)
+  IF (real_value = 0) AND (int_value <> 0) THEN
+    real_value = int_value
+  ENDIF
+  IF STATUS = NOPARAM THEN
+      WRITE('Parameter AR[', reg_no ,'] does not exist.')
+  ENDIF
+  CHK_STAT(STATUS)
+  
+  RETURN(real_value)
+  
+END GET_REAL_AR
+
+-- get LS string argument
+ROUTINE GET_STR_AR
+VAR
+  data_type  : INTEGER
+  int_value  : INTEGER
+  real_value : REAL
+  string_value : STRING[30]
+  STATUS     : INTEGER
+  
+BEGIN
+  data_type = Type_STRING
+  
+  GET_TPE_PRM(reg_no, data_type, int_value, real_value, string_value, STATUS)
+  IF STATUS = NOPARAM THEN
+      WRITE('Parameter AR[', reg_no ,'] does not exist.')
+  ENDIF
+  
+  CHK_STAT(STATUS)
+  
+  RETURN(string_value)
+END GET_STR_AR
+
+-- #########
+-- Setters
+-- #########
+
+-- set string
+-- input SR number "reg_no"
+-- input string "str_val"
+ROUTINE PUT_SR
+  VAR
+    STATUS : INTEGER
+  BEGIN
+    SET_STR_REG(reg_no, str_val, STATUS)
+    CHK_STAT(STATUS)
+    IF STATUS <> 0 THEN
+      ok = FALSE
+    ELSE
+      ok = TRUE
+    ENDIF 
+  END PUT_SR
+
+-- Set the comment of a Register or IO
+-- input "typ" - type of Register or IO
+-- input "Id" - register or IO number
+-- input "cmt" - set comment
+ROUTINE PUT_CMT
+  VAR
+    STATUS : INTEGER
+  BEGIN
+      IF (typ='F') THEN
+        SET_PORT_CMT(35,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+      IF (typ='DI') THEN
+        SET_PORT_CMT(1,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+      IF (typ='DO') THEN
+        SET_PORT_CMT(2,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+      IF (typ='AI') THEN
+        SET_PORT_CMT(3,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+      IF (typ='AO') THEN
+        SET_PORT_CMT(4,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+      IF (typ='UI') THEN
+        SET_PORT_CMT(20,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+      IF (typ='UO') THEN
+        SET_PORT_CMT(21,id, cmt, STATUS)
+        CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+      IF (typ='R') THEN
+        SET_REG_CMT(id, cmt, STATUS)
+          CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+      IF (typ='PR') THEN
+        SET_PREG_CMT(id, cmt, STATUS)
+          CHK_STAT(STATUS)
+        ok = TRUE
+      ELSE
+        karelError('SET_CMT-wrong type', 2)
+        ok = FALSE
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+      ENDIF
+    
+  END PUT_CMT
+
+ROUTINE PUT_INT_REG
+  VAR
+    STATUS : INTEGER
+  BEGIN
+    SET_INT_REG(reg_no, int_val, STATUS)
+    CHK_STAT(STATUS)
+    IF STATUS <> 0 THEN
+      ok = FALSE
+    ELSE
+      ok = TRUE
+    ENDIF
+  END PUT_INT_REG
+
+ROUTINE PUT_REAL_REG
+  VAR
+    STATUS : INTEGER
+  BEGIN
+    SET_REAL_REG(reg_no, real_val, STATUS)
+    CHK_STAT(STATUS)
+    IF STATUS <> 0 THEN
+      ok = FALSE
+    ELSE
+      ok = TRUE
+    ENDIF
+  END PUT_REAL_REG
+
+-- #########
+-- Checks
+-- #########
+
+ROUTINE IS_REG_REAL
+  VAR
+    real_flg    :  BOOLEAN
+      real_val   :  REAL
+      int_val     : INTEGER
+      STATUS : INTEGER
+  BEGIN
+    GET_REG(reg_no, real_flg, int_val, real_val, STATUS)
+      CHK_STAT(STATUS)
+    IF STATUS <> 0 THEN
+      ok = FALSE
+    ELSE
+      ok = TRUE
+    ENDIF
+
+    RETURN(real_flg)
+  END IS_REG_REAL
+
+ROUTINE IS_REG_INT
+  VAR
+    real_flg    :  BOOLEAN
+      real_val   :  REAL
+      int_val     : INTEGER
+      STATUS : INTEGER
+  BEGIN
+    GET_REG(reg_no, real_flg, int_val, real_val, STATUS)
+      CHK_STAT(STATUS)
+    IF STATUS <> 0 THEN
+      ok = FALSE
+    ELSE
+      ok = TRUE
+    ENDIF
+    
+    RETURN(NOT real_flg)
+  END IS_REG_INT
+
+
+-- #########
+-- Conversions
+-- #########
