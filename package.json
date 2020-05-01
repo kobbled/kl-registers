@@ -1,0 +1,21 @@
+{
+  "manver" : "1",
+  "project" : "registers",
+  "description" : "",
+  "version" : "0.0.1",
+  "license" : "Apache 2.0",
+  "author" : "kobbled",
+  "source" : [
+    "src/registers.kl"
+  ],
+  "includes" : [
+    "include"
+  ],
+  "tests" : [
+    "src/test/test_registers.kl"
+  ],
+  "depends" : [
+    "KUnit",
+    "errors"
+  ]
+}
