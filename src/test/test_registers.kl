@@ -18,22 +18,22 @@ ROUTINE t_set_cmt : BOOLEAN
   BEGIN
     reg_no = 10 -- TP_Prgm_Num
     s[1] = 'TP_Prgm_Num'
-    PUT_CMT('R', reg_no, s[1])
+    registers__set_comment('R', reg_no, s[1])
     GET_VAR(entry, 'registers', 'ok', b[1], status)
 
     reg_no = 16 -- Temp_UFrame
     s[2] = 'Temp_UFrame'
-    PUT_CMT('PR', reg_no, s[2])
+    registers__set_comment('PR', reg_no, s[2])
     GET_VAR(entry, 'registers', 'ok', b[2], status)
 
     reg_no = 1 -- Red LT
     s[3] = 'Red LT'
-    PUT_CMT('DO', reg_no, s[3])
+    registers__set_comment('DO', reg_no, s[3])
     GET_VAR(entry, 'registers', 'ok', b[3], status)
 
     reg_no = 8 -- Enable
     s[4] = 'Enable'
-    PUT_CMT('UI', reg_no, s[4])
+    registers__set_comment('UI', reg_no, s[4])
     GET_VAR(entry, 'registers', 'ok', b[4], status)
     
 
@@ -47,13 +47,13 @@ ROUTINE t_get_cmt : BOOLEAN
     s : ARRAY[4] OF STRING[16]
   BEGIN
     reg_no = 10 -- TP_Prgm_Num
-    s[1] = GET_CMT('R', reg_no)
+    s[1] = registers__get_comment('R', reg_no)
     reg_no = 16 -- Temp_UFrame
-    s[2] = GET_CMT('PR', reg_no)
+    s[2] = registers__get_comment('PR', reg_no)
     reg_no = 1 -- Red LT
-    s[3] = GET_CMT('DO', reg_no)
+    s[3] = registers__get_comment('DO', reg_no)
     reg_no = 8 -- Enable
-    s[4] = GET_CMT('UI', reg_no)
+    s[4] = registers__get_comment('UI', reg_no)
     
 
     RETURN(kunit_eq_str('TP_Prgm_Num',s[1]) AND
@@ -71,7 +71,7 @@ ROUTINE t_setintreg : BOOLEAN
   BEGIN
     reg_no = 10 -- TP_Prgm_Num
     i = 2224
-    PUT_INT_REG(reg_no, i)
+    registers__set_int(reg_no, i)
     GET_VAR(entry, 'registers', 'ok', b, status)
     
     RETURN(b)
@@ -83,7 +83,7 @@ ROUTINE t_getintreg : BOOLEAN
     o : INTEGER
   BEGIN
     reg_no = 10 -- TP_Prgm_Num
-    RETURN(kunit_eq_int(2224, GET_INT_REG(reg_no)))
+    RETURN(kunit_eq_int(2224, registers__get_int(reg_no)))
   END t_getintreg
 
   ROUTINE t_setrealreg : BOOLEAN
@@ -95,7 +95,7 @@ ROUTINE t_getintreg : BOOLEAN
   BEGIN
     reg_no = 133 -- diameter
     r = 3.56
-    PUT_REAL_REG(reg_no, r)
+    registers__set_real(reg_no, r)
     GET_VAR(entry, 'registers', 'ok', b, status)
     
     RETURN(b)
@@ -107,7 +107,7 @@ ROUTINE t_getintreg : BOOLEAN
     o : REAL
   BEGIN
     reg_no = 133 -- diameter
-    RETURN(kunit_eq_r(3.56, GET_REAL_REG(reg_no)))
+    RETURN(kunit_eq_r(3.56, registers__get_real(reg_no)))
   END t_getrealreg
 
   ROUTINE t_notareal : BOOLEAN
@@ -115,7 +115,7 @@ ROUTINE t_getintreg : BOOLEAN
     reg_no : INTEGER
   BEGIN
     reg_no = 10 -- TP_Prgm_Num
-    RETURN(kunit_assert(NOT IS_REG_REAL(reg_no)))
+    RETURN(kunit_assert(NOT registers__is_real(reg_no)))
   END t_notareal
 
   ROUTINE t_isareal : BOOLEAN
@@ -123,7 +123,7 @@ ROUTINE t_getintreg : BOOLEAN
     reg_no : INTEGER
   BEGIN
     reg_no = 133 -- diameter
-    RETURN(kunit_assert(IS_REG_REAL(reg_no)))
+    RETURN(kunit_assert(registers__is_real(reg_no)))
   END t_isareal
 
   ROUTINE t_isaint : BOOLEAN
@@ -131,7 +131,7 @@ ROUTINE t_getintreg : BOOLEAN
     reg_no : INTEGER
   BEGIN
     reg_no = 10 -- TP_Prgm_Num
-    RETURN(kunit_assert(IS_REG_INT(reg_no)))
+    RETURN(kunit_assert(registers__is_int(reg_no)))
   END t_isaint
 
   ROUTINE t_getio : BOOLEAN
@@ -152,7 +152,7 @@ ROUTINE t_getintreg : BOOLEAN
       RETURN(FALSE)
     ENDIF
 
-    RETURN(kunit_eq_int(1, GET_IO('F', 27)) AND kunit_eq_int(1, GET_IO('DI', 14)))
+    RETURN(kunit_eq_int(1, registers__get_io('F', 27)) AND kunit_eq_int(1, registers__get_io('DI', 14)))
   END t_getio
 
 ROUTINE revert_reg

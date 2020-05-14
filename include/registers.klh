@@ -1,32 +1,59 @@
 %ifndef registers_h
 %define registers_h
 
+%include namespace.m
+
+%define prog_name registers
+%define prog_name_alias regst
+
+-- namespaced members in format <prog_name_alias>__<func_name>
+--getters
+declare(prog_name,get_comment,prog_name_alias,getcmt)
+declare(prog_name,get_io,prog_name_alias,getio)
+declare(prog_name,get_int,prog_name_alias,getint)
+declare(prog_name,get_real,prog_name_alias,getrel)
+declare(prog_name,get_int_arg,prog_name_alias,gtargi)
+declare(prog_name,get_real_arg,prog_name_alias,gtargr)
+declare(prog_name,get_string_arg,prog_name_alias,gtargs)
+declare(prog_name,get_numreg,prog_name_alias,getnmr)
+declare(prog_name,get_stringreg,prog_name_alias,gtstrr)
+--setters
+declare(prog_name,set_string_reg,prog_name_alias,ststrr)
+declare(prog_name,set_comment,prog_name_alias,setcmt)
+declare(prog_name,set_int,prog_name_alias,setint)
+declare(prog_name,set_real,prog_name_alias,setrel)
+declare(prog_name,set_real,prog_name_alias,setrel)
+--type checks
+declare(prog_name,is_real,prog_name_alias,isreal)
+declare(prog_name,is_int,prog_name_alias,isint)
+
+
 --getters
 -- typ: 'F', 'DI', 'DO', 'AI', 'AO', 'UI', 'UO'
 --      'R', 'PR'
-ROUTINE GET_CMT(typ : STRING; id : INTEGER) : STRING FROM registers
-ROUTINE GET_IO(typ : STRING; port_no : INTEGER) : INTEGER FROM registers
-ROUTINE GET_INT_REG(reg_no : INTEGER) : INTEGER FROM registers
-ROUTINE GET_REAL_REG(reg_no : INTEGER) : REAL   FROM registers
+ROUTINE registers__get_comment(typ : STRING; id : INTEGER) : STRING FROM registers
+ROUTINE registers__get_io(typ : STRING; port_no : INTEGER) : INTEGER FROM registers
+ROUTINE registers__get_int(reg_no : INTEGER) : INTEGER FROM registers
+ROUTINE registers__get_real(reg_no : INTEGER) : REAL   FROM registers
 -- get tpe arguments
-ROUTINE GET_INT_AR(reg_no : INTEGER) : INTEGER FROM registers
-ROUTINE GET_REAL_AR(reg_no : INTEGER) : REAL FROM registers
-ROUTINE GET_STR_AR(reg_no : INTEGER) : STRING FROM registers
+ROUTINE registers__get_int_arg(reg_no : INTEGER) : INTEGER FROM registers
+ROUTINE registers__get_real_arg(reg_no : INTEGER) : REAL FROM registers
+ROUTINE registers__get_string_arg(reg_no : INTEGER) : STRING FROM registers
 -- returns if the register contains a real value = TRUE,
 -- or integer = FALSE
-ROUTINE GET_NUM_REG(reg_no : INTEGER; int_val : INTEGER; real_val : REAL) : BOOLEAN FROM registers
-ROUTINE GET_SR(reg_no : INTEGER) : STRING FROM registers
+ROUTINE registers__get_numreg(reg_no : INTEGER; int_val : INTEGER; real_val : REAL) : BOOLEAN FROM registers
+ROUTINE registers__get_string_reg(reg_no : INTEGER) : STRING FROM registers
 --setters
-ROUTINE PUT_SR(reg_no : INTEGER; str_val : STRING) FROM registers
+ROUTINE registers__set_string_reg(reg_no : INTEGER; str_val : STRING) FROM registers
 -- typ: 'F', 'DI', 'DO', 'AI', 'AO', 'UI', 'UO'
 --      'R', 'PR'
-ROUTINE PUT_CMT(typ : STRING; id : INTEGER; cmt : STRING) FROM registers
+ROUTINE registers__set_comment(typ : STRING; id : INTEGER; cmt : STRING) FROM registers
 -- TO ADD : ROUTINE PUT_IO(typ : STRING; port_no, value : INTEGER) : INTEGER FROM registers
-ROUTINE PUT_INT_REG(reg_no : INTEGER; int_val : INTEGER) FROM registers
-ROUTINE PUT_REAL_REG(reg_no : INTEGER; real_val : REAL) FROM registers
+ROUTINE registers__set_int(reg_no : INTEGER; int_val : INTEGER) FROM registers
+ROUTINE registers__set_real(reg_no : INTEGER; real_val : REAL) FROM registers
 --type check
-ROUTINE IS_REG_REAL(reg_no : INTEGER) : BOOLEAN FROM registers
-ROUTINE IS_REG_INT(reg_no : INTEGER) : BOOLEAN FROM registers
+ROUTINE registers__is_real(reg_no : INTEGER) : BOOLEAN FROM registers
+ROUTINE registers__is_int(reg_no : INTEGER) : BOOLEAN FROM registers
 --conversions
 
 
