@@ -32,10 +32,6 @@ ROUTINE registers__get_comment(typ : STRING; id : INTEGER) : STRING FROM registe
 ROUTINE registers__get_io(typ : STRING; port_no : INTEGER) : INTEGER FROM registers
 ROUTINE registers__get_int(reg_no : INTEGER) : INTEGER FROM registers
 ROUTINE registers__get_real(reg_no : INTEGER) : REAL   FROM registers
--- get tpe arguments
-ROUTINE registers__get_int_arg(reg_no : INTEGER) : INTEGER FROM registers
-ROUTINE registers__get_real_arg(reg_no : INTEGER) : REAL FROM registers
-ROUTINE registers__get_string_arg(reg_no : INTEGER) : STRING FROM registers
 -- returns if the register contains a real value = TRUE,
 -- or integer = FALSE
 ROUTINE registers__get_numreg(reg_no : INTEGER; int_val : INTEGER; real_val : REAL) : BOOLEAN FROM registers
