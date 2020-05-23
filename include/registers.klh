@@ -13,12 +13,11 @@ declare(prog_name,get_io,prog_name_alias,getio)
 declare(prog_name,get_int,prog_name_alias,getint)
 declare(prog_name,get_real,prog_name_alias,getrel)
 declare(prog_name,get_numreg,prog_name_alias,getnmr)
-declare(prog_name,get_stringreg,prog_name_alias,gtstrr)
+declare(prog_name,get_string_reg,prog_name_alias,gtstrr)
 --setters
 declare(prog_name,set_string_reg,prog_name_alias,ststrr)
 declare(prog_name,set_comment,prog_name_alias,setcmt)
 declare(prog_name,set_int,prog_name_alias,setint)
-declare(prog_name,set_real,prog_name_alias,setrel)
 declare(prog_name,set_real,prog_name_alias,setrel)
 --type checks
 declare(prog_name,is_real,prog_name_alias,isreal)
