@@ -12,7 +12,7 @@
     "include"
   ],
   "tests" : [
-    "src/test/test_registers.kl"
+    "test/test_registers.kl"
   ],
   "depends" : [
     "KUnit",
