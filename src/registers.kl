@@ -163,7 +163,7 @@ ROUTINE registers__get_numreg
   END registers__get_numreg
 
 -- Get string register value
-ROUTINE registers__get_string_reg
+ROUTINE registers__get_string
   VAR
     str_val	: STRING[100]
     STATUS : INTEGER
@@ -172,7 +172,7 @@ ROUTINE registers__get_string_reg
     CHK_STAT(STATUS)
     
     RETURN(str_val)
-  END registers__get_string_reg
+  END registers__get_string
 
 -- #########
 -- Setters
@@ -181,7 +181,7 @@ ROUTINE registers__get_string_reg
 -- set string
 -- input SR number "reg_no"
 -- input string "str_val"
-ROUTINE registers__set_string_reg
+ROUTINE registers__set_string
   VAR
     STATUS : INTEGER
   BEGIN
@@ -192,7 +192,7 @@ ROUTINE registers__set_string_reg
     ELSE
       ok = TRUE
     ENDIF 
-  END registers__set_string_reg
+  END registers__set_string
 
 -- Set the comment of a Register or IO
 -- input "typ" - type of Register or IO
