@@ -1,6 +1,8 @@
 PROGRAM registers
 %NOLOCKGROUP
 
+%INCLUDE errors.klt
+
 %INCLUDE registers.klt
 %INCLUDE registers.klh
 %INCLUDE errors.klh
@@ -56,7 +58,7 @@ ROUTINE registers__get_comment
         GET_PREG_CMT(id, cmt, STATUS)
           CHK_STAT(STATUS)
       ELSE
-        karelError('GET_CMT-wrong type', 2)
+        karelError(POS_TYPE_MISMATCH,'GET_CMT-wrong type', ER_ABORT)
       ENDIF
       ENDIF
       ENDIF
@@ -103,7 +105,7 @@ ROUTINE registers__get_io
       GET_PORT_VAL(port_type, port_no, val, STATUS)
       CHK_STAT(STATUS)
     ELSE
-      karelError('GET_PORT_VAL wrong type', 2)
+      karelError(POS_TYPE_MISMATCH,'GET_PORT_VAL wrong type', ER_ABORT)
     ENDIF
 
     RETURN(val)
@@ -247,7 +249,7 @@ ROUTINE registers__set_comment
           CHK_STAT(STATUS)
         ok = TRUE
       ELSE
-        karelError('SET_CMT-wrong type', 2)
+        karelError(POS_TYPE_MISMATCH,'SET_CMT-wrong type', ER_ABORT)
         ok = FALSE
       ENDIF
       ENDIF

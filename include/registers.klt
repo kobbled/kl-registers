@@ -8,9 +8,6 @@ CONST
   Type_REAL     = 2
   Type_STRING   = 3
   INVALIDTYPE   = 17043 -- invalid data type
-  ER_WARN       = 0 -- warning no change in task execution
-  ER_WARN_STP   = 1 -- pause all taks and stop all motion 
-  ER_ABORT      = 2 -- abort all tasks and cancel
 
 VAR
   ok : BOOLEAN
