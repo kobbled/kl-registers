@@ -10,6 +10,29 @@ PROGRAM registers
 BEGIN
 END registers
 
+--private
+ROUTINE get_type_num (typ : STRING) : INTEGER
+  BEGIN
+    IF (typ='R') THEN RETURN(DATA_REG) ; ENDIF
+    IF (typ='PR') THEN RETURN(DATA_POSREG) ; ENDIF
+    IF (typ='SR') THEN RETURN(DATA_STRING) ; ENDIF
+    IF (typ='F') THEN RETURN(io_flag) ; ENDIF
+    IF (typ='DI') THEN RETURN(io_din) ; ENDIF
+    IF (typ='DO') THEN RETURN(io_dout) ; ENDIF
+    IF (typ='AI') THEN RETURN(io_anin) ; ENDIF
+    IF (typ='AO') THEN RETURN(io_anout) ; ENDIF
+    IF (typ='RI') THEN RETURN(io_rdi) ; ENDIF
+    IF (typ='RO') THEN RETURN(io_rdo)  ; ENDIF
+    IF (typ='GI') THEN RETURN(io_gpin) ; ENDIF
+    IF (typ='GO') THEN RETURN(io_gpout)  ; ENDIF
+    IF (typ='UI') THEN RETURN(io_uopin) ; ENDIF
+    IF (typ='UO') THEN RETURN(io_uopout) ; ENDIF
+    IF (typ='SI') THEN RETURN(io_sopin) ; ENDIF
+    IF (typ='SO') THEN RETURN(io_sopout) ; ENDIF
+
+    RETURN(0)
+  END get_type_num
+
 -- #########
 -- Getters
 -- #########
@@ -19,55 +42,29 @@ END registers
 ROUTINE registers__get_comment
   ------------------------------------
   VAR
+    port_type : INTEGER
     cmt : STRING[30]
     STATUS : INTEGER
   BEGIN
-      IF (typ='F') THEN
-        GET_PORT_CMT(io_flag,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-      ELSE
-      IF (typ='DI') THEN
-        GET_PORT_CMT(io_din,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-      ELSE
-      IF (typ='DO') THEN
-        GET_PORT_CMT(io_dout,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-      ELSE
-      IF (typ='AI') THEN
-        GET_PORT_CMT(io_anin,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-      ELSE
-      IF (typ='AO') THEN
-        GET_PORT_CMT(io_anout,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-      ELSE
-      IF (typ='UI') THEN
-        GET_PORT_CMT(io_uopin,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-      ELSE
-      IF (typ='UO') THEN
-        GET_PORT_CMT(io_uopout,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-      ELSE
-      IF (typ='R') THEN
+    port_type = get_type_num(typ)
+
+    IF port_type = 0 THEN
+      karelError(POS_TYPE_MISMATCH,'GET_CMT-wrong type', ER_ABORT)
+      RETURN('')
+    ENDIF
+
+    SELECT port_type OF
+      CASE(DATA_REG):
         GET_REG_CMT(id, cmt, STATUS)
-          CHK_STAT(STATUS)
-      ELSE
-      IF (typ='PR') THEN
+      CASE(DATA_POSREG):
         GET_PREG_CMT(id, cmt, STATUS)
-          CHK_STAT(STATUS)
-      ELSE
-        karelError(POS_TYPE_MISMATCH,'GET_CMT-wrong type', ER_ABORT)
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
+      CASE(DATA_STRING):
+        GET_SREG_CMT(id, cmt, STATUS)
+      ELSE:
+        GET_PORT_CMT(port_type, id, cmt, STATUS)
+    ENDSELECT
+
+    CHK_STAT(STATUS)
 
     RETURN(cmt)
   END registers__get_comment
@@ -78,35 +75,16 @@ ROUTINE registers__get_io
     STATUS : INTEGER
     val : INTEGER
   BEGIN
-    port_type = 0
-    IF (typ='F') THEN
-      port_type = io_flag
-    ENDIF
-    IF (typ='DI') THEN
-      port_type = io_din
-    ENDIF
-    IF (typ='DO') THEN
-      port_type = io_dout
-    ENDIF
-    IF (typ='AI') THEN
-      port_type = io_anin
-    ENDIF
-    IF (typ='AO') THEN
-      port_type = io_anout
-    ENDIF
-    IF (typ='UI') THEN
-      port_type = io_uopin
-    ENDIF
-    IF (typ='UO') THEN
-      port_type = io_uopout
+    port_type = get_type_num(typ)
+
+    IF (port_type = 0) OR (port_type = DATA_REG) OR (port_type = DATA_POSREG) OR &
+       (port_type = DATA_STRING) THEN
+      karelError(POS_TYPE_MISMATCH,'GET_PORT_VAL wrong type', ER_ABORT)
+      RETURN(0)
     ENDIF
 
-    IF (port_type <> 0) THEN
-      GET_PORT_VAL(port_type, port_no, val, STATUS)
-      CHK_STAT(STATUS)
-    ELSE
-      karelError(POS_TYPE_MISMATCH,'GET_PORT_VAL wrong type', ER_ABORT)
-    ENDIF
+    GET_PORT_VAL(port_type, port_no, val, STATUS)
+    CHK_STAT(STATUS)
 
     RETURN(val)
   END registers__get_io
@@ -202,64 +180,30 @@ ROUTINE registers__set_string
 -- input "cmt" - set comment
 ROUTINE registers__set_comment
   VAR
+    port_type : INTEGER
     STATUS : INTEGER
   BEGIN
-      IF (typ='F') THEN
-        SET_PORT_CMT(35,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-      IF (typ='DI') THEN
-        SET_PORT_CMT(1,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-      IF (typ='DO') THEN
-        SET_PORT_CMT(2,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-      IF (typ='AI') THEN
-        SET_PORT_CMT(3,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-      IF (typ='AO') THEN
-        SET_PORT_CMT(4,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-      IF (typ='UI') THEN
-        SET_PORT_CMT(20,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-      IF (typ='UO') THEN
-        SET_PORT_CMT(21,id, cmt, STATUS)
-        CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-      IF (typ='R') THEN
+
+    port_type = get_type_num(typ)
+
+    IF port_type = 0 THEN
+      karelError(POS_TYPE_MISMATCH,'SET_CMT-wrong type', ER_ABORT)
+      ok = FALSE
+    ENDIF
+
+    SELECT port_type OF
+      CASE(DATA_REG):
         SET_REG_CMT(id, cmt, STATUS)
-          CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-      IF (typ='PR') THEN
+      CASE(DATA_POSREG):
         SET_PREG_CMT(id, cmt, STATUS)
-          CHK_STAT(STATUS)
-        ok = TRUE
-      ELSE
-        karelError(POS_TYPE_MISMATCH,'SET_CMT-wrong type', ER_ABORT)
-        ok = FALSE
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
-      ENDIF
+      CASE(DATA_STRING):
+        SET_SREG_CMT(id, cmt, STATUS)
+      ELSE:
+        SET_PORT_CMT(port_type, id, cmt, STATUS)
+    ENDSELECT
+
+    CHK_STAT(STATUS)
+    ok = TRUE
     
   END registers__set_comment
 

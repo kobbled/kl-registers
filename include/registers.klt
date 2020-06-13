@@ -4,9 +4,9 @@
 %INCLUDE kliotyps.kl
 
 CONST
-  Type_INTEGER  = 1
-  Type_REAL     = 2
-  Type_STRING   = 3
+  DATA_REG      = 19001
+  DATA_POSREG   = 19002
+  DATA_STRING   = 19003
   INVALIDTYPE   = 17043 -- invalid data type
 
 VAR

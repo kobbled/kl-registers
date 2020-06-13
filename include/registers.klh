@@ -24,9 +24,10 @@ declare(prog_name,is_real,prog_name_alias,isreal)
 declare(prog_name,is_int,prog_name_alias,isint)
 
 
+-- typ: 'F', 'DI', 'DO', 'AI', 'AO', 'UI', 'UO', 'SI', 'SO'
+--      'RO', 'RI', 'R', 'PR', 'SR'
+
 --getters
--- typ: 'F', 'DI', 'DO', 'AI', 'AO', 'UI', 'UO'
---      'R', 'PR'
 ROUTINE registers__get_comment(typ : STRING; id : INTEGER) : STRING FROM registers
 ROUTINE registers__get_io(typ : STRING; port_no : INTEGER) : INTEGER FROM registers
 ROUTINE registers__get_int(reg_no : INTEGER) : INTEGER FROM registers
@@ -37,8 +38,6 @@ ROUTINE registers__get_numreg(reg_no : INTEGER; int_val : INTEGER; real_val : RE
 ROUTINE registers__get_string(reg_no : INTEGER) : STRING FROM registers
 --setters
 ROUTINE registers__set_string(reg_no : INTEGER; str_val : STRING) FROM registers
--- typ: 'F', 'DI', 'DO', 'AI', 'AO', 'UI', 'UO'
---      'R', 'PR'
 ROUTINE registers__set_comment(typ : STRING; id : INTEGER; cmt : STRING) FROM registers
 -- TO ADD : ROUTINE PUT_IO(typ : STRING; port_no, value : INTEGER) : INTEGER FROM registers
 ROUTINE registers__set_int(reg_no : INTEGER; int_val : INTEGER) FROM registers
