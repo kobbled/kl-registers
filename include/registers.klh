@@ -6,44 +6,39 @@
 %define prog_name registers
 %define prog_name_alias regst
 
--- namespaced members in format <prog_name_alias>__<func_name>
---getters
-declare(prog_name,get_comment,prog_name_alias,getcmt)
-declare(prog_name,get_io,prog_name_alias,getio)
-declare(prog_name,get_int,prog_name_alias,getint)
-declare(prog_name,get_real,prog_name_alias,getrel)
-declare(prog_name,get_numreg,prog_name_alias,getnmr)
-declare(prog_name,get_string,prog_name_alias,gtstrr)
---setters
-declare(prog_name,set_string,prog_name_alias,ststrr)
-declare(prog_name,set_comment,prog_name_alias,setcmt)
-declare(prog_name,set_int,prog_name_alias,setint)
-declare(prog_name,set_real,prog_name_alias,setrel)
---type checks
-declare(prog_name,is_real,prog_name_alias,isreal)
-declare(prog_name,is_int,prog_name_alias,isint)
-
 
 -- typ: 'F', 'DI', 'DO', 'AI', 'AO', 'UI', 'UO', 'SI', 'SO'
 --      'RO', 'RI', 'R', 'PR', 'SR'
 
 --getters
+declare_function(prog_name,get_comment,prog_name_alias,getcmt)
 ROUTINE registers__get_comment(typ : STRING; id : INTEGER) : STRING FROM registers
+declare_function(prog_name,get_io,prog_name_alias,getio)
 ROUTINE registers__get_io(typ : STRING; port_no : INTEGER) : INTEGER FROM registers
+declare_function(prog_name,get_int,prog_name_alias,getint)
 ROUTINE registers__get_int(reg_no : INTEGER) : INTEGER FROM registers
+declare_function(prog_name,get_real,prog_name_alias,getrel)
 ROUTINE registers__get_real(reg_no : INTEGER) : REAL   FROM registers
 -- returns if the register contains a real value = TRUE,
 -- or integer = FALSE
+declare_function(prog_name,get_numreg,prog_name_alias,getnmr)
 ROUTINE registers__get_numreg(reg_no : INTEGER; int_val : INTEGER; real_val : REAL) : BOOLEAN FROM registers
+declare_function(prog_name,get_string,prog_name_alias,gtstrr)
 ROUTINE registers__get_string(reg_no : INTEGER) : STRING FROM registers
 --setters
+declare_function(prog_name,set_string,prog_name_alias,ststrr)
 ROUTINE registers__set_string(reg_no : INTEGER; str_val : STRING) FROM registers
+declare_function(prog_name,set_comment,prog_name_alias,setcmt)
 ROUTINE registers__set_comment(typ : STRING; id : INTEGER; cmt : STRING) FROM registers
 -- TO ADD : ROUTINE PUT_IO(typ : STRING; port_no, value : INTEGER) : INTEGER FROM registers
+declare_function(prog_name,set_int,prog_name_alias,setint)
 ROUTINE registers__set_int(reg_no : INTEGER; int_val : INTEGER) FROM registers
+declare_function(prog_name,set_real,prog_name_alias,setrel)
 ROUTINE registers__set_real(reg_no : INTEGER; real_val : REAL) FROM registers
 --type check
+declare_function(prog_name,is_real,prog_name_alias,isreal)
 ROUTINE registers__is_real(reg_no : INTEGER) : BOOLEAN FROM registers
+declare_function(prog_name,is_int,prog_name_alias,isint)
 ROUTINE registers__is_int(reg_no : INTEGER) : BOOLEAN FROM registers
 --conversions
 
