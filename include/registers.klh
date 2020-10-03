@@ -35,6 +35,10 @@ declare_function(prog_name,set_int,prog_name_alias,setint)
 ROUTINE registers__set_int(reg_no : INTEGER; int_val : INTEGER) FROM registers
 declare_function(prog_name,set_real,prog_name_alias,setrel)
 ROUTINE registers__set_real(reg_no : INTEGER; real_val : REAL) FROM registers
+declare_function(prog_name,set_io,prog_name_alias,setio)
+ROUTINE registers__set_io(typ : STRING; port_no : INTEGER; val : BOOLEAN) FROM registers
+declare_function(prog_name,set_boolean,prog_name_alias,setbol)
+ROUTINE registers__set_boolean(flg_no : INTEGER; bool_val : BOOLEAN) FROM registers
 --type check
 declare_function(prog_name,is_real,prog_name_alias,isreal)
 ROUTINE registers__is_real(reg_no : INTEGER) : BOOLEAN FROM registers

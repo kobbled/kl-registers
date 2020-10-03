@@ -233,6 +233,33 @@ ROUTINE registers__set_real
     ENDIF
   END registers__set_real
 
+ROUTINE registers__set_io
+  VAR
+    port_type : INTEGER
+    STATUS : INTEGER
+  BEGIN
+    port_type = get_type_num(typ)
+
+    IF (port_type = 0) OR (port_type = DATA_REG) OR (port_type = DATA_POSREG) OR &
+       (port_type = DATA_STRING) THEN
+      karelError(POS_TYPE_MISMATCH,'SET_PORT_VAL wrong type', ER_ABORT)
+    ENDIF
+
+    IF val THEN
+      SET_PORT_VAL(port_type, port_no, 1, STATUS)
+    ELSE
+      SET_PORT_VAL(port_type, port_no, 0, STATUS)
+    ENDIF
+    CHK_STAT(STATUS)
+
+  END registers__set_io
+
+
+ROUTINE registers__set_boolean
+  BEGIN
+    registers__set_io('F', flg_no, bool_val)
+  END registers__set_boolean
+
 -- #########
 -- Checks
 -- #########
