@@ -1,0 +1,12 @@
+%ifndef reg_types_t
+%define reg_types_t
+
+%INCLUDE kliotyps.kl
+
+CONST
+  DATA_REG      = 191
+  DATA_POSREG   = 192
+  DATA_STRING   = 193
+  INVALIDTYPE   = 17043 -- invalid data type
+
+%endif --reg_types_t

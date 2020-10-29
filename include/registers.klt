@@ -1,13 +1,7 @@
 %ifndef registers_t
 %define registers_t
 
-%INCLUDE kliotyps.kl
-
-CONST
-  DATA_REG      = 19001
-  DATA_POSREG   = 19002
-  DATA_STRING   = 19003
-  INVALIDTYPE   = 17043 -- invalid data type
+%include register_types.klt
 
 VAR
   ok : BOOLEAN
