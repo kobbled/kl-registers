@@ -15,8 +15,10 @@
     "test/test_regist.kl"
   ],
   "depends" : [
-    "KUnit",
     "errors",
     "ktransw-macros"
+  ],
+  "tests-depends" : [
+    "KUnit"
   ]
 }
