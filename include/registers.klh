@@ -11,10 +11,14 @@
 --      'RO', 'RI', 'R', 'PR', 'SR'
 
 --getters
+declare_function(prog_name,get_type_enum,prog_name_alias,getenm)
+ROUTINE registers__get_type_enum (typ_str : STRING) : INTEGER FROM registers
+declare_function(prog_name,get_type_name,prog_name_alias,getnam)
+ROUTINE registers__get_type_name (typ_str : INTEGER) : STRING FROM registers
 declare_function(prog_name,get_comment,prog_name_alias,getcmt)
-ROUTINE registers__get_comment(typ : STRING; id : INTEGER) : STRING FROM registers
+ROUTINE registers__get_comment(typ : INTEGER; id : INTEGER) : STRING FROM registers
 declare_function(prog_name,get_io,prog_name_alias,getio)
-ROUTINE registers__get_io(typ : STRING; port_no : INTEGER) : INTEGER FROM registers
+ROUTINE registers__get_io(typ : INTEGER; port_no : INTEGER) : INTEGER FROM registers
 declare_function(prog_name,get_int,prog_name_alias,getint)
 ROUTINE registers__get_int(reg_no : INTEGER) : INTEGER FROM registers
 declare_function(prog_name,get_real,prog_name_alias,getrel)
@@ -29,14 +33,14 @@ ROUTINE registers__get_string(reg_no : INTEGER) : STRING FROM registers
 declare_function(prog_name,set_string,prog_name_alias,ststrr)
 ROUTINE registers__set_string(reg_no : INTEGER; str_val : STRING) FROM registers
 declare_function(prog_name,set_comment,prog_name_alias,setcmt)
-ROUTINE registers__set_comment(typ : STRING; id : INTEGER; cmt : STRING) FROM registers
+ROUTINE registers__set_comment(typ : INTEGER; id : INTEGER; cmt : STRING) FROM registers
 -- TO ADD : ROUTINE PUT_IO(typ : STRING; port_no, value : INTEGER) : INTEGER FROM registers
 declare_function(prog_name,set_int,prog_name_alias,setint)
 ROUTINE registers__set_int(reg_no : INTEGER; int_val : INTEGER) FROM registers
 declare_function(prog_name,set_real,prog_name_alias,setrel)
 ROUTINE registers__set_real(reg_no : INTEGER; real_val : REAL) FROM registers
 declare_function(prog_name,set_io,prog_name_alias,setio)
-ROUTINE registers__set_io(typ : STRING; port_no : INTEGER; val : BOOLEAN) FROM registers
+ROUTINE registers__set_io(typ : INTEGER; port_no : INTEGER; val : BOOLEAN) FROM registers
 declare_function(prog_name,set_boolean,prog_name_alias,setbol)
 ROUTINE registers__set_boolean(flg_no : INTEGER; bool_val : BOOLEAN) FROM registers
 --type check

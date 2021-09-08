@@ -10,50 +10,69 @@ PROGRAM registers
 BEGIN
 END registers
 
---private
-ROUTINE get_type_num (typ : STRING) : INTEGER
-  BEGIN
-    IF (typ='R') THEN RETURN(DATA_REG) ; ENDIF
-    IF (typ='PR') THEN RETURN(DATA_POSREG) ; ENDIF
-    IF (typ='SR') THEN RETURN(DATA_STRING) ; ENDIF
-    IF (typ='F') THEN RETURN(io_flag) ; ENDIF
-    IF (typ='DI') THEN RETURN(io_din) ; ENDIF
-    IF (typ='DO') THEN RETURN(io_dout) ; ENDIF
-    IF (typ='AI') THEN RETURN(io_anin) ; ENDIF
-    IF (typ='AO') THEN RETURN(io_anout) ; ENDIF
-    IF (typ='RI') THEN RETURN(io_rdi) ; ENDIF
-    IF (typ='RO') THEN RETURN(io_rdo)  ; ENDIF
-    IF (typ='GI') THEN RETURN(io_gpin) ; ENDIF
-    IF (typ='GO') THEN RETURN(io_gpout)  ; ENDIF
-    IF (typ='UI') THEN RETURN(io_uopin) ; ENDIF
-    IF (typ='UO') THEN RETURN(io_uopout) ; ENDIF
-    IF (typ='SI') THEN RETURN(io_sopin) ; ENDIF
-    IF (typ='SO') THEN RETURN(io_sopout) ; ENDIF
-
-    RETURN(0)
-  END get_type_num
-
 -- #########
 -- Getters
 -- #########
+
+ROUTINE registers__get_type_enum
+  BEGIN
+    IF (typ_str='R') THEN RETURN(DATA_REG) ; ENDIF
+    IF (typ_str='PR') THEN RETURN(DATA_POSREG) ; ENDIF
+    IF (typ_str='SR') THEN RETURN(DATA_STRING) ; ENDIF
+    IF (typ_str='F') THEN RETURN(io_flag) ; ENDIF
+    IF (typ_str='DI') THEN RETURN(io_din) ; ENDIF
+    IF (typ_str='DO') THEN RETURN(io_dout) ; ENDIF
+    IF (typ_str='AI') THEN RETURN(io_anin) ; ENDIF
+    IF (typ_str='AO') THEN RETURN(io_anout) ; ENDIF
+    IF (typ_str='RI') THEN RETURN(io_rdi) ; ENDIF
+    IF (typ_str='RO') THEN RETURN(io_rdo)  ; ENDIF
+    IF (typ_str='GI') THEN RETURN(io_gpin) ; ENDIF
+    IF (typ_str='GO') THEN RETURN(io_gpout)  ; ENDIF
+    IF (typ_str='UI') THEN RETURN(io_uopin) ; ENDIF
+    IF (typ_str='UO') THEN RETURN(io_uopout) ; ENDIF
+    IF (typ_str='SI') THEN RETURN(io_sopin) ; ENDIF
+    IF (typ_str='SO') THEN RETURN(io_sopout) ; ENDIF
+
+    RETURN(0)
+  END registers__get_type_enum
+
+ROUTINE registers__get_type_name
+  BEGIN
+    IF (typ_str=DATA_REG) THEN RETURN('R') ; ENDIF
+    IF (typ_str=DATA_POSREG) THEN RETURN('PR') ; ENDIF
+    IF (typ_str=DATA_STRING) THEN RETURN('SR') ; ENDIF
+    IF (typ_str=io_flag) THEN RETURN('F') ; ENDIF
+    IF (typ_str=io_din) THEN RETURN('DI') ; ENDIF
+    IF (typ_str=io_dout) THEN RETURN('DO') ; ENDIF
+    IF (typ_str=io_anin) THEN RETURN('AI') ; ENDIF
+    IF (typ_str=io_anout) THEN RETURN('AO') ; ENDIF
+    IF (typ_str=io_rdi) THEN RETURN('RI') ; ENDIF
+    IF (typ_str=io_rdo) THEN RETURN('RO')  ; ENDIF
+    IF (typ_str=io_gpin) THEN RETURN('GI') ; ENDIF
+    IF (typ_str=io_gpout) THEN RETURN('GO')  ; ENDIF
+    IF (typ_str=io_uopin) THEN RETURN('UI') ; ENDIF
+    IF (typ_str=io_uopout) THEN RETURN('UO') ; ENDIF
+    IF (typ_str=io_sopin) THEN RETURN('SI') ; ENDIF
+    IF (typ_str=io_sopout) THEN RETURN('SO') ; ENDIF
+
+    RETURN('')
+  END registers__get_type_name
 
 -- return comments from registers and IO's 
 -- specifying the register type and its number
 ROUTINE registers__get_comment
   ------------------------------------
   VAR
-    port_type : INTEGER
     cmt : STRING[30]
     STATUS : INTEGER
   BEGIN
-    port_type = get_type_num(typ)
 
-    IF port_type = 0 THEN
+    IF typ = 0 THEN
       karelError(POS_TYPE_MISMATCH,'GET_CMT-wrong type', ER_ABORT)
       RETURN('')
     ENDIF
 
-    SELECT port_type OF
+    SELECT typ OF
       CASE(DATA_REG):
         GET_REG_CMT(id, cmt, STATUS)
       CASE(DATA_POSREG):
@@ -61,7 +80,7 @@ ROUTINE registers__get_comment
       CASE(DATA_STRING):
         GET_SREG_CMT(id, cmt, STATUS)
       ELSE:
-        GET_PORT_CMT(port_type, id, cmt, STATUS)
+        GET_PORT_CMT(typ, id, cmt, STATUS)
     ENDSELECT
 
     CHK_STAT(STATUS)
@@ -71,19 +90,17 @@ ROUTINE registers__get_comment
 
 ROUTINE registers__get_io
   VAR
-    port_type : INTEGER
     STATUS : INTEGER
     val : INTEGER
   BEGIN
-    port_type = get_type_num(typ)
 
-    IF (port_type = 0) OR (port_type = DATA_REG) OR (port_type = DATA_POSREG) OR &
-       (port_type = DATA_STRING) THEN
+    IF (typ = 0) OR (typ = DATA_REG) OR (typ = DATA_POSREG) OR &
+       (typ = DATA_STRING) THEN
       karelError(POS_TYPE_MISMATCH,'GET_PORT_VAL wrong type', ER_ABORT)
       RETURN(0)
     ENDIF
 
-    GET_PORT_VAL(port_type, port_no, val, STATUS)
+    GET_PORT_VAL(typ, port_no, val, STATUS)
     CHK_STAT(STATUS)
 
     RETURN(val)
@@ -180,18 +197,15 @@ ROUTINE registers__set_string
 -- input "cmt" - set comment
 ROUTINE registers__set_comment
   VAR
-    port_type : INTEGER
     STATUS : INTEGER
   BEGIN
 
-    port_type = get_type_num(typ)
-
-    IF port_type = 0 THEN
+    IF typ = 0 THEN
       karelError(POS_TYPE_MISMATCH,'SET_CMT-wrong type', ER_ABORT)
       ok = FALSE
     ENDIF
 
-    SELECT port_type OF
+    SELECT typ OF
       CASE(DATA_REG):
         SET_REG_CMT(id, cmt, STATUS)
       CASE(DATA_POSREG):
@@ -199,7 +213,7 @@ ROUTINE registers__set_comment
       CASE(DATA_STRING):
         SET_SREG_CMT(id, cmt, STATUS)
       ELSE:
-        SET_PORT_CMT(port_type, id, cmt, STATUS)
+        SET_PORT_CMT(typ, id, cmt, STATUS)
     ENDSELECT
 
     CHK_STAT(STATUS)
@@ -235,20 +249,18 @@ ROUTINE registers__set_real
 
 ROUTINE registers__set_io
   VAR
-    port_type : INTEGER
     STATUS : INTEGER
   BEGIN
-    port_type = get_type_num(typ)
 
-    IF (port_type = 0) OR (port_type = DATA_REG) OR (port_type = DATA_POSREG) OR &
-       (port_type = DATA_STRING) THEN
+    IF (typ = 0) OR (typ = DATA_REG) OR (typ = DATA_POSREG) OR &
+       (typ = DATA_STRING) THEN
       karelError(POS_TYPE_MISMATCH,'SET_PORT_VAL wrong type', ER_ABORT)
     ENDIF
 
     IF val THEN
-      SET_PORT_VAL(port_type, port_no, 1, STATUS)
+      SET_PORT_VAL(typ, port_no, 1, STATUS)
     ELSE
-      SET_PORT_VAL(port_type, port_no, 0, STATUS)
+      SET_PORT_VAL(typ, port_no, 0, STATUS)
     ENDIF
     CHK_STAT(STATUS)
 
@@ -257,7 +269,7 @@ ROUTINE registers__set_io
 
 ROUTINE registers__set_boolean
   BEGIN
-    registers__set_io('F', flg_no, bool_val)
+    registers__set_io(io_flag, flg_no, bool_val)
   END registers__set_boolean
 
 -- #########

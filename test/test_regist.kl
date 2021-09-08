@@ -5,7 +5,7 @@ VAR
   entry : INTEGER
   status : INTEGER
 
-%INCLUDE kliotyps.kl
+%INCLUDE register_types.klt
 
 %INCLUDE registers.klh
 %INCLUDE kunit.klh
@@ -18,22 +18,22 @@ ROUTINE t_set_cmt : BOOLEAN
   BEGIN
     reg_no = 10 -- TP_Prgm_Num
     s[1] = 'TP_Prgm_Num'
-    registers__set_comment('R', reg_no, s[1])
+    registers__set_comment(DATA_REG, reg_no, s[1])
     GET_VAR(entry, 'registers', 'ok', b[1], status)
 
     reg_no = 16 -- Temp_UFrame
     s[2] = 'Temp_UFrame'
-    registers__set_comment('PR', reg_no, s[2])
+    registers__set_comment(DATA_POSREG, reg_no, s[2])
     GET_VAR(entry, 'registers', 'ok', b[2], status)
 
     reg_no = 1 -- Red LT
     s[3] = 'Red LT'
-    registers__set_comment('DO', reg_no, s[3])
+    registers__set_comment(io_dout, reg_no, s[3])
     GET_VAR(entry, 'registers', 'ok', b[3], status)
 
     reg_no = 8 -- Enable
     s[4] = 'Enable'
-    registers__set_comment('UI', reg_no, s[4])
+    registers__set_comment(io_uopin, reg_no, s[4])
     GET_VAR(entry, 'registers', 'ok', b[4], status)
     
 
@@ -47,13 +47,13 @@ ROUTINE t_get_cmt : BOOLEAN
     s : ARRAY[4] OF STRING[16]
   BEGIN
     reg_no = 10 -- TP_Prgm_Num
-    s[1] = registers__get_comment('R', reg_no)
+    s[1] = registers__get_comment(DATA_REG, reg_no)
     reg_no = 16 -- Temp_UFrame
-    s[2] = registers__get_comment('PR', reg_no)
+    s[2] = registers__get_comment(DATA_POSREG, reg_no)
     reg_no = 1 -- Red LT
-    s[3] = registers__get_comment('DO', reg_no)
+    s[3] = registers__get_comment(io_dout, reg_no)
     reg_no = 8 -- Enable
-    s[4] = registers__get_comment('UI', reg_no)
+    s[4] = registers__get_comment(io_uopout, reg_no)
     
 
     RETURN(kunit_eq_str('TP_Prgm_Num',s[1]) AND
@@ -152,7 +152,7 @@ ROUTINE t_getintreg : BOOLEAN
       RETURN(FALSE)
     ENDIF
 
-    RETURN(kunit_eq_int(1, registers__get_io('F', 27)) AND kunit_eq_int(1, registers__get_io('DI', 14)))
+    RETURN(kunit_eq_int(1, registers__get_io(io_flag, 27)) AND kunit_eq_int(1, registers__get_io(io_din, 14)))
   END t_getio
 
 ROUTINE revert_reg
