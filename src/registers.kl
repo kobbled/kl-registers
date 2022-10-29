@@ -106,6 +106,18 @@ ROUTINE registers__get_io
     RETURN(val)
   END registers__get_io
 
+ROUTINE registers__get_boolean
+  VAR
+    bool_val : INTEGER
+  BEGIN
+    bool_val = registers__get_io(io_flag, flg_no)
+    IF bool_val = 0 THEN
+      RETURN(FALSE)
+    ELSE
+      RETURN(TRUE)
+    ENDIF
+  END registers__get_boolean
+
 -- Public: get integer value for specified register
 -- wrapper for GET_REG
 -- returns the integer value of the register
@@ -220,6 +232,45 @@ ROUTINE registers__set_comment
     ok = TRUE
     
   END registers__set_comment
+
+ROUTINE registers__clear_comments
+VAR
+  id : INTEGER
+  STATUS : INTEGER
+BEGIN
+  IF typ = 0 THEN
+    karelError(POS_TYPE_MISMATCH,'SET_CMT-wrong type', ER_ABORT)
+    ok = FALSE
+  ENDIF
+
+  id = 1
+  REPEAT
+    SELECT typ OF
+      CASE(DATA_REG):
+        SET_REG_CMT(id, '', STATUS)
+        IF (STATUS = 0) AND reset_reg THEN
+          SET_INT_REG(id, 0, STATUS)
+        ENDIF
+      CASE(DATA_POSREG):
+        SET_PREG_CMT(id, '', STATUS)
+        IF (STATUS = 0) AND reset_reg THEN
+          CLR_POS_REG(id, 0, STATUS)
+        ENDIF
+      CASE(DATA_STRING):
+        SET_SREG_CMT(id, '', STATUS)
+        IF (STATUS = 0) AND reset_reg THEN
+          SET_STR_REG(id, '', STATUS)
+        ENDIF
+      ELSE:
+        SET_PORT_CMT(typ, id, '', STATUS)
+        IF (STATUS = 0) AND reset_reg THEN
+          SET_PORT_VAL(typ, id, 0, STATUS)
+        ENDIF
+    ENDSELECT
+
+    id = id + 1
+  UNTIL(status<>0)
+END registers__clear_comments
 
 ROUTINE registers__set_int
   VAR

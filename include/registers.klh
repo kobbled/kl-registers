@@ -23,6 +23,8 @@ declare_function(prog_name,get_int,prog_name_alias,getint)
 ROUTINE registers__get_int(reg_no : INTEGER) : INTEGER FROM registers
 declare_function(prog_name,get_real,prog_name_alias,getrel)
 ROUTINE registers__get_real(reg_no : INTEGER) : REAL   FROM registers
+declare_function(prog_name,get_boolean,prog_name_alias,getbol)
+ROUTINE registers__get_boolean(flg_no : INTEGER) : BOOLEAN FROM registers
 -- returns if the register contains a real value = TRUE,
 -- or integer = FALSE
 declare_function(prog_name,get_numreg,prog_name_alias,getnmr)
@@ -34,6 +36,8 @@ declare_function(prog_name,set_string,prog_name_alias,ststrr)
 ROUTINE registers__set_string(reg_no : INTEGER; str_val : STRING) FROM registers
 declare_function(prog_name,set_comment,prog_name_alias,setcmt)
 ROUTINE registers__set_comment(typ : INTEGER; id : INTEGER; cmt : STRING) FROM registers
+declare_function(prog_name,clear_comments,prog_name_alias,clrcmt)
+ROUTINE registers__clear_comments(typ : INTEGER; reset_reg : BOOLEAN) FROM registers
 -- TO ADD : ROUTINE PUT_IO(typ : STRING; port_no, value : INTEGER) : INTEGER FROM registers
 declare_function(prog_name,set_int,prog_name_alias,setint)
 ROUTINE registers__set_int(reg_no : INTEGER; int_val : INTEGER) FROM registers
