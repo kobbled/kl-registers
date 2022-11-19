@@ -5,10 +5,10 @@ VAR
   entry : INTEGER
   status : INTEGER
 
-%INCLUDE register_types.klt
+%include register_types.klt
 
-%INCLUDE registers.klh
-%INCLUDE kunit.klh
+%include registers.klh
+%include kunit.klh
 
 ROUTINE t_set_cmt : BOOLEAN
   VAR

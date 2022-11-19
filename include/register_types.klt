@@ -1,7 +1,7 @@
 %ifndef reg_types_t
 %define reg_types_t
 
-%INCLUDE kliotyps.kl
+%include kliotyps.kl
 
 CONST
   DATA_REG      = 191

@@ -1,11 +1,11 @@
 PROGRAM registers
 %NOLOCKGROUP
 
-%INCLUDE errors.klt
+%include errors.klt
 
-%INCLUDE registers.klt
-%INCLUDE registers.klh
-%INCLUDE errors.klh
+%include registers.klt
+%include registers.klh
+%include errors.klh
 
 BEGIN
 END registers
