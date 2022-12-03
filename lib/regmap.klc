@@ -1,0 +1,83 @@
+PROGRAM class_name
+%NOBUSYLAMP
+%COMMENT = 'type map to registers'
+%NOLOCKGROUP
+%NOPAUSE = COMMAND + TPENABLE + ERROR
+
+%defeval BASE_CLASSNAME class_name
+
+%ifdef REGMAP_STRUCT
+--define custom struct if supplied
+REGMAP_STRUCT
+%endif
+
+%ifdef REGMAP_STRUCT_IMPORT
+--import custom struct if specified
+%include REGMAP_STRUCT_IMPORT
+%endif
+
+CONST
+  TYPE_INTEGER  = 1
+  TYPE_REAL     = 2
+  TYPE_STRING   = 3
+
+  --functions
+  FUNC_SET_REG  = 1
+  FUNC_GET_REG  = 2
+
+-- register type defines
+%include register_types.klt
+%include errors.klt
+
+--regmap
+%include regmap.klt
+
+VAR
+  func_ : INTEGER
+  progname_ : STRING[32]
+  varname_ : STRING[32]
+  status : INTEGER
+
+  di : INTEGER
+  dr : REAL
+  ds : STRING[1]
+
+%include registers.klh
+%include registerstp.klh
+%from pose.klh %import get_posreg_joint, get_posreg_xyz
+
+%defeval class_name BASE_CLASSNAME
+
+%include regmap.klh
+
+-- **** DEFINED TEMPLATES
+
+ROUTINE set_registers
+  BEGIN
+    REGMAPPGET
+  END set_registers
+
+ROUTINE get_registers
+
+  BEGIN
+    REGMAPPSET
+  END get_registers
+
+BEGIN
+  --tpe AR[1] get = 1 or set = 2
+  GET_TPE_PRM(1, TYPE_INTEGER, func_, dr, ds,status)
+  --tpe AR[2] progname
+  GET_TPE_PRM(2, TYPE_STRING, di, dr, progname_,status)
+  --tpe AR[3] varname
+  GET_TPE_PRM(3, TYPE_STRING, di, dr, varname_,status)
+
+  SELECT func_ OF
+    CASE(FUNC_SET_REG):
+      set_registers(progname_, varname_)
+    CASE(FUNC_GET_REG):
+      get_registers(progname_, varname_)
+    ELSE:
+  ENDSELECT
+  
+
+END class_name

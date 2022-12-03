@@ -1,0 +1,58 @@
+%include define_type.m
+
+%mode push
+%mode string QQQ "`" "`" "\\"
+
+--getters
+---------
+%define map_select_getter(regtyp, id, field, typ) `
+%ifeq regtyp 'R'
+%ifeq typ 'REAL'
+  registerstp__get_karel_real(progname, varname + '.' + field, id)
+%else
+  registerstp__get_karel_int(progname, varname + '.' + field, id)
+%endif --end typ real
+%else 
+%ifeq regtyp 'SR'
+  registerstp__get_karel_string(progname, varname + '.' + field, id)
+%else 
+%ifeq regtyp 'PR'
+%ifeq typ 'JOINTPOS'
+  registerstp__get_karel_joint(progname, varname + '.' + field, id)
+%else
+  registerstp__get_karel_xyz(progname, varname + '.' + field, id)
+%endif --end typ jointpos
+%else
+  registerstp__get_karel_io(progname, varname + '.' + field, regtyp, id)
+%endif -- end regtype pr
+%endif -- end regtype sr
+%endif -- end regtype R
+`
+
+--setters
+---------
+%define map_select_setter(regtyp, id, field, typ) `
+%ifeq regtyp 'R'
+%ifeq typ 'REAL'
+  registerstp__set_karel_real(registers__get_real(id), progname, varname + '.' + field)
+%else
+  registerstp__set_karel_int(registers__get_int(id), progname, varname + '.' + field)
+%endif --end typ real
+%else 
+%ifeq regtyp 'SR'
+  registerstp__set_karel_string(registers__get_string(id), progname, varname + '.' + field)
+%else 
+%ifeq regtyp 'PR'
+%ifeq typ 'JOINTPOS'
+  registerstp__set_karel_joint(pose__get_posreg_joint(id, 1), progname, varname + '.' + field)
+%else
+  registerstp__set_karel_xyz(pose__get_posreg_xyz(id, 1), progname, varname + '.' + field)
+%endif --end typ jointpos
+%else
+  registerstp__set_karel_bool(registers__get_io(registers__get_type_enum (regtyp), id), progname, varname + '.' + field)
+%endif -- end regtype pr
+%endif -- end regtype sr
+%endif -- end regtype R
+`
+
+%mode pop

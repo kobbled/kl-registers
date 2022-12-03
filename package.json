@@ -10,8 +10,8 @@
     "src/registerstp.kl"
   ],
   "includes" : [
-    "include"
-  ],
+    "include",
+    "lib"
   ],
   "depends" : [
     "errors",
@@ -21,6 +21,9 @@
   ],
   "tests" : [
     "test/test_set_var.tpp",
+  ],
+  "tests-includes" :[
+    "test/config"
   ],
   "tests-depends" : [
     "KUnit"

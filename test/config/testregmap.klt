@@ -1,0 +1,32 @@
+
+%define array_size 5
+%define REGMAP_TYPE t_TSTCUSTOM
+
+%mode push
+%mode string QQQ "`" "`" "\\"
+%define REGMAP_STRUCT `TYPE
+t_TSTCUSTOM FROM class_name = STRUCTURE
+    str : STRING[16]
+    reg1 : INTEGER
+    reg2 : REAL
+    pose : XYZWPR
+    io : BOOLEAN
+  ENDSTRUCTURE`
+
+%define REGMAPPGET `
+  map_select_getter('SR', 1, 'str' , 'STRING')
+  map_select_getter('R',  2, 'reg1', 'INTEGER')
+  map_select_getter('R',  3, 'reg2', 'REAL')
+  map_select_getter('PR', 4, 'pose', 'XYZWPR')
+  map_select_getter('F',  1, 'io'  , 'BOOLEAN')
+`
+
+%define REGMAPPSET `
+  map_select_setter('SR', 1, 'str' , 'STRING')
+  map_select_setter('R',  2, 'reg1', 'INTEGER')
+  map_select_setter('R',  3, 'reg2', 'REAL')
+  map_select_setter('PR', 4, 'pose', 'XYZWPR')
+  map_select_setter('F',  1, 'io'  , 'BOOLEAN')
+`
+
+%mode pop
