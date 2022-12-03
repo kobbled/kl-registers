@@ -1,0 +1,164 @@
+PROGRAM registerstp
+%NOLOCKGROUP
+
+%define MAX_STRING 32
+
+%include register_types.klt
+
+%include errors.klh
+%from systemlib.klh %import int_to_bool
+%include registers.klh
+%from pose.klh %import set_posreg_xyz, set_posreg_joint
+
+%include registerstp.klh
+
+-- ** GETTERS **
+-- *************
+
+ROUTINE registerstp__get_karel_int
+  VAR
+    entry : INTEGER
+    val  : INTEGER
+    status : INTEGER
+  BEGIN
+    GET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+    registers__set_int(reg_no, val)
+  END registerstp__get_karel_int
+
+ROUTINE registerstp__get_karel_real
+  VAR
+    entry : INTEGER
+    val  : REAL
+    status : INTEGER
+  BEGIN
+    GET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+    registers__set_real(reg_no, val)
+  END registerstp__get_karel_real
+
+ROUTINE registerstp__get_karel_io
+  VAR
+    entry : INTEGER
+    val  : BOOLEAN
+    status : INTEGER
+  BEGIN
+    GET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+    registers__set_io(registers__get_type_enum(typ), reg_no, val)
+  END registerstp__get_karel_io
+
+ROUTINE registerstp__get_karel_string
+  VAR
+    entry : INTEGER
+    val  : STRING[MAX_STRING]
+    status : INTEGER
+  BEGIN
+    GET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+    registers__set_string(reg_no, val)
+  END registerstp__get_karel_string
+
+ROUTINE registerstp__get_karel_xyz
+  VAR
+    entry : INTEGER
+    val  : XYZWPR
+    status : INTEGER
+  BEGIN
+    GET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+    pose__set_posreg_xyz(val, reg_no, 1)
+  END registerstp__get_karel_xyz
+
+ROUTINE registerstp__get_karel_xyzgrp
+  VAR
+    entry : INTEGER
+    val  : XYZWPR
+    status : INTEGER
+  BEGIN
+    GET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+    pose__set_posreg_xyz(val, reg_no, grp_no)
+  END registerstp__get_karel_xyzgrp
+
+ROUTINE registerstp__get_karel_joint
+  VAR
+    entry : INTEGER
+    val  : JOINTPOS
+    status : INTEGER
+  BEGIN
+    GET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+    pose__set_posreg_joint(val, reg_no, 1)
+  END registerstp__get_karel_joint
+
+ROUTINE registerstp__get_karel_jointgrp
+  VAR
+    entry : INTEGER
+    val  : JOINTPOS
+    status : INTEGER
+  BEGIN
+    GET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+    pose__set_posreg_joint(val, reg_no, grp_no)
+  END registerstp__get_karel_jointgrp
+
+-- ** SETTERS **
+-- *************
+
+ROUTINE registerstp__set_karel_int
+  VAR
+    entry : INTEGER
+    status : INTEGER
+  BEGIN
+    SET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+  END registerstp__set_karel_int
+
+ROUTINE registerstp__set_karel_real
+  VAR
+    entry : INTEGER
+    status : INTEGER
+  BEGIN
+    SET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+  END registerstp__set_karel_real
+
+ROUTINE registerstp__set_karel_bool
+  VAR
+    entry : INTEGER
+    status : INTEGER
+  BEGIN
+    SET_VAR(entry, progname, varname, system__int_to_bool(val), status)
+    CHK_STAT(status)
+  END registerstp__set_karel_bool
+
+ROUTINE registerstp__set_karel_string
+  VAR
+    entry : INTEGER
+    status : INTEGER
+  BEGIN
+    SET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+  END registerstp__set_karel_string
+
+ROUTINE registerstp__set_karel_xyz
+  VAR
+    entry : INTEGER
+    status : INTEGER
+  BEGIN
+    SET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+  END registerstp__set_karel_xyz
+
+ROUTINE registerstp__set_karel_joint
+  VAR
+    entry : INTEGER
+    status : INTEGER
+  BEGIN
+    SET_VAR(entry, progname, varname, val, status)
+    CHK_STAT(status)
+  END registerstp__set_karel_joint
+
+BEGIN
+END registerstp

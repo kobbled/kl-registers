@@ -6,7 +6,8 @@
   "license" : "Apache 2.0",
   "author" : "kobbled",
   "source" : [
-    "src/registers.kl"
+    "src/registers.kl",
+    "src/registerstp.kl"
   ],
   "includes" : [
     "include"
@@ -20,5 +21,24 @@
   ],
   "tests-depends" : [
     "KUnit"
+  ],
+  "tp-interfaces" : [
+    {"routine" : "registerstp__get_karel_int", "program_name" : "get_kint"},
+    {"routine" : "registerstp__get_karel_real", "program_name" : "get_krel"},
+    {"routine" : "registerstp__get_karel_io", "program_name" : "get_kio"},
+    {"routine" : "registerstp__get_karel_string", "program_name" : "get_kstr"},
+    {"routine" : "registerstp__get_karel_xyz", "program_name" : "get_kpos"},
+    {"routine" : "registerstp__get_karel_xyzgrp", "program_name" : "get_kposgrp"},
+    {"routine" : "registerstp__get_karel_joint", "program_name" : "get_kjnt"},
+    {"routine" : "registerstp__get_karel_jointgrp", "program_name" : "get_kjntgrp"},
+    {"routine" : "registerstp__set_karel_int", "program_name" : "set_kint"},
+    {"routine" : "registerstp__set_karel_real", "program_name" : "set_krel"},
+    {"routine" : "registerstp__set_karel_bool", "program_name" : "set_kbool"},
+    {"routine" : "registerstp__set_karel_string", "program_name" : "set_kstr"},
+    {"routine" : "registerstp__set_karel_xyz", "program_name" : "set_kxyz"},
+    {"routine" : "registerstp__set_karel_joint", "program_name" : "set_kjnt"}
+  ],
+  "interface-depends" : [
+    "TPElib"
   ]
 }
