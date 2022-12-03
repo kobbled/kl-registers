@@ -12,12 +12,15 @@
   "includes" : [
     "include"
   ],
-  "tests" : [
-    "test/test_regist.kl"
   ],
   "depends" : [
     "errors",
+    "pose",
+    "systemlib",
     "ktransw-macros"
+  ],
+  "tests" : [
+    "test/test_set_var.tpp",
   ],
   "tests-depends" : [
     "KUnit"
