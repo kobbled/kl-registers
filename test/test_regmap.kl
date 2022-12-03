@@ -1,0 +1,43 @@
+PROGRAM test_regmap
+%NOLOCKGROUP
+
+%include systemvars.klt
+
+%include testregmap.klt
+REGMAP_STRUCT
+
+VAR
+  struct : REGMAP_TYPE
+  out_struct : REGMAP_TYPE
+
+%include kunit.klh
+
+--tsp object
+%class tstrmp('regmap.klc','regmap.klh','testregmap.klt')
+
+ROUTINE t_setreg : BOOLEAN
+  BEGIN
+    struct.str = 'hello'
+    struct.reg1 = 28
+    struct.reg2 = 6.283
+    struct.pose = POS(0,0,150,90,0,0,(ZEROPOS(1).config_data))
+    struct.io = TRUE
+
+    tstrmp__set_registers('test_regmap', 'struct')
+
+    RETURN(TRUE)
+  END t_setreg
+
+ROUTINE t_getreg : BOOLEAN
+  BEGIN
+    tstrmp__get_registers('test_regmap', 'out_struct')
+
+    RETURN(TRUE)
+  END t_getreg
+
+BEGIN
+  kunit_test('test set ', t_setreg)
+  kunit_test('test set ', t_getreg)
+
+  kunit_done
+END test_regmap

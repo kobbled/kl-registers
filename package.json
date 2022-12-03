@@ -20,7 +20,9 @@
     "ktransw-macros"
   ],
   "tests" : [
+    "test/test_regmap.kl",
     "test/test_set_var.tpp",
+    "test/test_set_struct.tpp"
   ],
   "tests-includes" :[
     "test/config"
