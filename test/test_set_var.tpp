@@ -3,7 +3,7 @@ TP_GROUPMASK = "1,*,*,*,*"
 intvar := R[2]
 realvar := R[3]
 strvar := SR[1]
-posvar := PR[1]
+posvar := PR[4]
 boolvar := R[4]
 flg    := F[1]
 

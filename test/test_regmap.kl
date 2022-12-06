@@ -2,6 +2,7 @@ PROGRAM test_regmap
 %NOLOCKGROUP
 
 %include systemvars.klt
+%include register_types.klt
 
 %include testregmap.klt
 REGMAP_STRUCT
@@ -10,12 +11,17 @@ VAR
   struct : REGMAP_TYPE
   out_struct : REGMAP_TYPE
 
+%from pose.klh %import get_posreg_xyz
+%from registers.klh %import get_int, get_real, get_string, get_io, get_boolean
+
 %include kunit.klh
 
 --tsp object
 %class tstrmp('regmap.klc','regmap.klh','testregmap.klt')
 
 ROUTINE t_setreg : BOOLEAN
+  VAR
+    actual : t_TSTCUSTOM
   BEGIN
     struct.str = 'hello'
     struct.reg1 = 28
@@ -25,19 +31,29 @@ ROUTINE t_setreg : BOOLEAN
 
     tstrmp__set_registers('test_regmap', 'struct')
 
-    RETURN(TRUE)
+    actual.str = registers__get_string(1)
+    actual.reg1 = registers__get_int(2)
+    actual.reg2 = registers__get_real(3)
+    actual.pose = pose__get_posreg_xyz(4, 1)
+    actual.io = registers__get_boolean(1)
+
+    RETURN(kunit_eq_str('hello', actual.str) AND kunit_eq_int(28, actual.reg1) AND &
+           kunit_eq_r(6.283, actual.reg2) AND kunit_eq_pos(POS(0,0,150,90,0,0,(ZEROPOS(1).config_data)), actual.pose) AND &
+           kunit_assert(actual.io) )
   END t_setreg
 
 ROUTINE t_getreg : BOOLEAN
   BEGIN
     tstrmp__get_registers('test_regmap', 'out_struct')
 
-    RETURN(TRUE)
+    RETURN(kunit_eq_str('hello', out_struct.str) AND kunit_eq_int(28, out_struct.reg1) AND &
+           kunit_eq_r(6.283, out_struct.reg2) AND kunit_eq_pos(POS(0,0,150,90,0,0,(ZEROPOS(1).config_data)), out_struct.pose) AND &
+           kunit_assert(out_struct.io) )
   END t_getreg
 
 BEGIN
-  kunit_test('test set ', t_setreg)
-  kunit_test('test set ', t_getreg)
+  kunit_test('test set', t_setreg)
+  kunit_test('test get', t_getreg)
 
   kunit_done
 END test_regmap
