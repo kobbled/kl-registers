@@ -1,6 +1,7 @@
 
-%define array_size 5
 %define REGMAP_TYPE t_TSTCUSTOM
+
+--define REGMAP_STRUCT_IMPORT 
 
 %mode push
 %mode string QQQ "`" "`" "\\"
@@ -14,19 +15,19 @@ t_TSTCUSTOM FROM class_name = STRUCTURE
   ENDSTRUCTURE`
 
 %define REGMAPPGET `
-  map_select_getter('SR', 1, 'str' , 'STRING')
-  map_select_getter('R',  2, 'reg1', 'INTEGER')
-  map_select_getter('R',  3, 'reg2', 'REAL')
-  map_select_getter('PR', 4, 'pose', 'XYZWPR')
-  map_select_getter('F',  1, 'io'  , 'BOOLEAN')
+  map_select_getter(progname, varname, 'SR', 1, 'str' , 'STRING')
+  map_select_getter(progname, varname, 'R',  2, 'reg1', 'INTEGER')
+  map_select_getter(progname, varname, 'R',  3, 'reg2', 'REAL')
+  map_select_getter(progname, varname, 'PR', 4, 'pose', 'XYZWPR')
+  map_select_getter(progname, varname, 'F',  1, 'io'  , 'BOOLEAN')
 `
 
 %define REGMAPPSET `
-  map_select_setter('SR', 1, 'str' , 'STRING')
-  map_select_setter('R',  2, 'reg1', 'INTEGER')
-  map_select_setter('R',  3, 'reg2', 'REAL')
-  map_select_setter('PR', 4, 'pose', 'XYZWPR')
-  map_select_setter('F',  1, 'io'  , 'BOOLEAN')
+  map_select_setter(progname, varname, 'SR', 1, 'str' , 'STRING')
+  map_select_setter(progname, varname, 'R',  2, 'reg1', 'INTEGER')
+  map_select_setter(progname, varname, 'R',  3, 'reg2', 'REAL')
+  map_select_setter(progname, varname, 'PR', 4, 'pose', 'XYZWPR')
+  map_select_setter(progname, varname, 'F',  1, 'io'  , 'BOOLEAN')
 `
 
 %mode pop

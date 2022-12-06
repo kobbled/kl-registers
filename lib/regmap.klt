@@ -5,7 +5,7 @@
 
 --getters
 ---------
-%define map_select_getter(regtyp, id, field, typ) `
+%define map_select_getter(progname, varname, regtyp, id, field, typ) `
 %ifeq regtyp 'R'
 %ifeq typ 'REAL'
   registerstp__get_karel_real(progname, varname + '.' + field, id)
@@ -31,7 +31,7 @@
 
 --setters
 ---------
-%define map_select_setter(regtyp, id, field, typ) `
+%define map_select_setter(progname, varname, regtyp, id, field, typ) `
 %ifeq regtyp 'R'
 %ifeq typ 'REAL'
   registerstp__set_karel_real(registers__get_real(id), progname, varname + '.' + field)

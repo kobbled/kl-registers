@@ -17,6 +17,7 @@
     "errors",
     "pose",
     "systemlib",
+    "TPElib",
     "ktransw-macros"
   ],
   "tests" : [
@@ -45,8 +46,5 @@
     {"routine" : "registerstp__set_karel_string", "program_name" : "set_kstr"},
     {"routine" : "registerstp__set_karel_xyz", "program_name" : "set_kxyz"},
     {"routine" : "registerstp__set_karel_joint", "program_name" : "set_kjnt"}
-  ],
-  "interface-depends" : [
-    "TPElib"
   ]
 }
