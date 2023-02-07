@@ -67,19 +67,8 @@ ROUTINE registerstp__get_karel_xyz
   BEGIN
     GET_VAR(entry, progname, varname, val, status)
     CHK_STAT(status)
-    pose__set_posreg_xyz(val, reg_no, 1)
-  END registerstp__get_karel_xyz
-
-ROUTINE registerstp__get_karel_xyzgrp
-  VAR
-    entry : INTEGER
-    val  : XYZWPR
-    status : INTEGER
-  BEGIN
-    GET_VAR(entry, progname, varname, val, status)
-    CHK_STAT(status)
     pose__set_posreg_xyz(val, reg_no, grp_no)
-  END registerstp__get_karel_xyzgrp
+  END registerstp__get_karel_xyz
 
 ROUTINE registerstp__get_karel_joint
   VAR
@@ -89,19 +78,8 @@ ROUTINE registerstp__get_karel_joint
   BEGIN
     GET_VAR(entry, progname, varname, val, status)
     CHK_STAT(status)
-    pose__set_posreg_joint(val, reg_no, 1)
-  END registerstp__get_karel_joint
-
-ROUTINE registerstp__get_karel_jointgrp
-  VAR
-    entry : INTEGER
-    val  : JOINTPOS
-    status : INTEGER
-  BEGIN
-    GET_VAR(entry, progname, varname, val, status)
-    CHK_STAT(status)
     pose__set_posreg_joint(val, reg_no, grp_no)
-  END registerstp__get_karel_jointgrp
+  END registerstp__get_karel_joint
 
 -- ** SETTERS **
 -- *************

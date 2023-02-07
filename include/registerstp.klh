@@ -16,13 +16,9 @@ ROUTINE registerstp__get_karel_io(progname : STRING; varname : STRING; typ : STR
 declare_function(prog_name,get_karel_string,prog_name_alias,gtkstr)
 ROUTINE registerstp__get_karel_string(progname : STRING; varname : STRING; reg_no : INTEGER) FROM registerstp
 declare_function(prog_name,get_karel_xyz,prog_name_alias,gtkxyz)
-ROUTINE registerstp__get_karel_xyz(progname : STRING; varname : STRING; reg_no : INTEGER) FROM registerstp
-declare_function(prog_name,get_karel_xyzgrp,prog_name_alias,gtkxgp)
-ROUTINE registerstp__get_karel_xyzgrp(progname : STRING; varname : STRING; reg_no : INTEGER; grp_no : INTEGER) FROM registerstp
+ROUTINE registerstp__get_karel_xyz(progname : STRING; varname : STRING; reg_no : INTEGER; grp_no : INTEGER) FROM registerstp
 declare_function(prog_name,get_karel_joint,prog_name_alias,gtkjnt)
-ROUTINE registerstp__get_karel_joint(progname : STRING; varname : STRING; reg_no : INTEGER) FROM registerstp
-declare_function(prog_name,get_karel_jointgrp,prog_name_alias,gtkjgp)
-ROUTINE registerstp__get_karel_jointgrp(progname : STRING; varname : STRING; reg_no : INTEGER; grp_no : INTEGER) FROM registerstp
+ROUTINE registerstp__get_karel_joint(progname : STRING; varname : STRING; reg_no : INTEGER; grp_no : INTEGER) FROM registerstp
 declare_function(prog_name,get_struct,prog_name_alias,gtstrt)
 ROUTINE registerstp__get_struct(regmap_class : STRING; struct_prog : STRING; struct_name : STRING) FROM registerstp
 
