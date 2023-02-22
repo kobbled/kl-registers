@@ -15,19 +15,19 @@ t_TSTCUSTOM FROM class_name = STRUCTURE
   ENDSTRUCTURE`
 
 %define REGMAPPGET `
-  map_select_getter(progname, varname, 'SR', 1, 'str' , 'STRING')
-  map_select_getter(progname, varname, 'R',  2, 'reg1', 'INTEGER')
-  map_select_getter(progname, varname, 'R',  3, 'reg2', 'REAL')
-  map_select_getter(progname, varname, 'PR', 4, 'pose', 'XYZWPR')
-  map_select_getter(progname, varname, 'F',  1, 'io'  , 'BOOLEAN')
+  map_select_getter(progname, varname, 'SR', 1, 'str' , 'STRING', 1)
+  map_select_getter(progname, varname, 'R',  2, 'reg1', 'INTEGER', 1)
+  map_select_getter(progname, varname, 'R',  3, 'reg2', 'REAL', 1)
+  map_select_getter(progname, varname, 'PR', 4, 'pose', 'XYZWPR', 1)
+  map_select_getter(progname, varname, 'F',  1, 'io'  , 'BOOLEAN', 1)
 `
 
 %define REGMAPPSET `
-  map_select_setter(progname, varname, 'SR', 1, 'str' , 'STRING')
-  map_select_setter(progname, varname, 'R',  2, 'reg1', 'INTEGER')
-  map_select_setter(progname, varname, 'R',  3, 'reg2', 'REAL')
-  map_select_setter(progname, varname, 'PR', 4, 'pose', 'XYZWPR')
-  map_select_setter(progname, varname, 'F',  1, 'io'  , 'BOOLEAN')
+  map_select_setter(progname, varname, 'SR', 1, 'str' , 'STRING', 1)
+  map_select_setter(progname, varname, 'R',  2, 'reg1', 'INTEGER', 1)
+  map_select_setter(progname, varname, 'R',  3, 'reg2', 'REAL', 1)
+  map_select_setter(progname, varname, 'PR', 4, 'pose', 'XYZWPR', 1)
+  map_select_setter(progname, varname, 'F',  1, 'io'  , 'BOOLEAN', 1)
 `
 
 %mode pop

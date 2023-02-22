@@ -5,7 +5,7 @@
 
 --getters
 ---------
-%define map_select_getter(progname, varname, regtyp, id, field, typ) `
+%define map_select_getter(progname, varname, regtyp, id, field, typ, grp) `
 %ifeq regtyp 'R'
 %ifeq typ 'REAL'
   registerstp__get_karel_real(progname, varname + '.' + field, id)
@@ -18,9 +18,9 @@
 %else 
 %ifeq regtyp 'PR'
 %ifeq typ 'JOINTPOS'
-  registerstp__get_karel_joint(progname, varname + '.' + field, id)
+  registerstp__get_karel_joint(progname, varname + '.' + field, id, grp)
 %else
-  registerstp__get_karel_xyz(progname, varname + '.' + field, id)
+  registerstp__get_karel_xyz(progname, varname + '.' + field, id, grp)
 %endif --end typ jointpos
 %else
   registerstp__get_karel_io(progname, varname + '.' + field, regtyp, id)

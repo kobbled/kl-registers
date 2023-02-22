@@ -39,7 +39,7 @@ VAR
 %from registers.klh %import get_int, get_real, get_string, get_io, get_type_enum
 %from pose.klh %import get_posreg_joint, get_posreg_xyz
 %include registerstp.klh
-%from tpe.klh %import get_int_arg, get_real_arg, get_string_arg, get_boolean_arg
+%from tpe.vars.klh %import get_int_arg, get_real_arg, get_string_arg, get_boolean_arg
 
 %defeval class_name BASE_CLASSNAME
 
