@@ -5,13 +5,13 @@ realvar := R[3]
 strvar := SR[1]
 posvar := PR[4]
 boolvar := R[4]
-flg    := F[1]
+flg    := F[5]
 
 #initialize
 intvar = 100
 realvar = 2.718
 strvar = Str::set('guten tag')
-posvar.group(1) = Pos::setxyzgp(500, 500, 0, 90, 0, 180)
+posvar.group(1) = Pos::setxyz(500, 500, 0, 90, 0, 180)
 posvar.group(1) = Pos::setcfg('F U T, 0, 0, 0')
 flg = on
 boolvar = flg

@@ -35,7 +35,7 @@ ROUTINE t_setreg : BOOLEAN
     actual.reg1 = registers__get_int(2)
     actual.reg2 = registers__get_real(3)
     actual.pose = pose__get_posreg_xyz(4, 1)
-    actual.io = registers__get_boolean(1)
+    actual.io = registers__get_boolean(5)
 
     RETURN(kunit_eq_str('hello', actual.str) AND kunit_eq_int(28, actual.reg1) AND &
            kunit_eq_r(6.283, actual.reg2) AND kunit_eq_pos(POS(0,0,150,90,0,0,(ZEROPOS(1).config_data)), actual.pose) AND &
